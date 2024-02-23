@@ -13,13 +13,11 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '20'
+    - name: Code
+      uses: actions/checkout@v2
 
     - name: Build
-      run: docker build -t v:1.0.0 .
+      run: docker build -t v:1.0.0 ./app
 
     - name: Test
       run: docker run v:1.0.0 npm test
