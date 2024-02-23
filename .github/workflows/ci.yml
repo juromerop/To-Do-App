@@ -20,4 +20,4 @@ jobs:
       run: docker build -t v:1.0.0 ./app
 
     - name: Test
-      run:  npm install | docker run v:1.0.0 npm test
+      run: docker run v:1.0.0 npm test
