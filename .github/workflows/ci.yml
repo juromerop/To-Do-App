@@ -28,7 +28,7 @@ jobs:
     - name: Tag
       run: |
         commit_message=$(git log -1 --pretty=%B)
-        version=$(echo "${commit_message}" | grep -oP '(?<=VERSION: ).*')
+        version=$(echo "${commit_message}")
         if [ -z "${version}" ]; then
           version="1.0.0"
         fi
