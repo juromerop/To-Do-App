@@ -28,19 +28,15 @@ jobs:
     - name: Tag
       run: |
         commit_message=$(git log -1 --pretty=%B)
-        version=$(echo "${commit_message}" | grep -oP '(?<=version: ).*')
+        version=$(echo "${commit_message}" | grep -oP '(?<=VERSION: ).*')
         if [ -z "${version}" ]; then
           version="1.0.0"
         fi
         echo "${version}" > ./app/version.txt
-        echo "Tagging version: ${version}"
         docker tag juromerop/to-do-app juromerop/to-do-app:${version}
 
       
     - name: Push
       run: |
         echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u juromerop --password-stdin
-        version=$(echo "${commit_message}" | grep -oP '(?<=version: ).*')
-        echo "${version}" > ./app/version.txt
-        echo "Pushing version: ${version}"
         docker push juromerop/to-do-app:${version}
