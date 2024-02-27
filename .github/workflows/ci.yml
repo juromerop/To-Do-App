@@ -9,8 +9,8 @@ jobs:
   build:
 
     runs-on: self-hosted
-    env:
-      IMAGE_VERSION: "1.1.1"
+    # env:
+    #   IMAGE_VERSION: "1.1.1"
 
     steps:
     - name: Code
@@ -22,12 +22,22 @@ jobs:
     - name: Test
       run: docker run juromerop/to-do-app npm test
 
+    # - name: Tag
+    #   run: |
+    #     echo "${IMAGE_VERSION}" > ./app/version.txt
+    #     docker tag juromerop/to-do-app juromerop/to-do-app:${IMAGE_VERSION}
+      
+    # - name: Push
+    #   run: |
+    #     echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u juromerop --password-stdin
+    #     docker push juromerop/to-do-app:${IMAGE_VERSION}
+
     - name: Tag
       run: |
-        echo "${IMAGE_VERSION}" > ./app/version.txt
-        docker tag juromerop/to-do-app juromerop/to-do-app:${IMAGE_VERSION}
+        echo ${{ github.sha }} > ./app/version.txt
+        docker tag juromerop/to-do-app juromerop/to-do-app:${{ github.sha }}
       
     - name: Push
       run: |
         echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u juromerop --password-stdin
-        docker push juromerop/to-do-app:${IMAGE_VERSION}
+        docker push juromerop/to-do-app:${{ github.sha }}
