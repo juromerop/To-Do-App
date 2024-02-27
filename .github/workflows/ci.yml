@@ -41,4 +41,5 @@ jobs:
       run: |
         echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u juromerop --password-stdin
         echo "${version}" > ./app/version.txt
+        echo "Pushing version: ${version}"
         docker push juromerop/to-do-app:${version}
