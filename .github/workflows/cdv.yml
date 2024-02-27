@@ -23,5 +23,3 @@ jobs:
         gh release create $TAG_NAME
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
