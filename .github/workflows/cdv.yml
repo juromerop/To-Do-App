@@ -29,7 +29,6 @@ jobs:
       if: github.event.workflow_run.conclusion == 'success'
       uses: "softprops/action-gh-release@v1"
       with:
-        files: ""
         token: ${{ secrets.GITHUB_TOKEN }}
-        args: |
-          release create ${{ github.repository }} v$(cat ./app/version.txt)
+        tag_name: v$(cat ./app/version.txt)
+
