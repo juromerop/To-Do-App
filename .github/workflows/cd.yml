@@ -17,8 +17,8 @@ jobs:
     
     - name : Deploy
       run: |
-        docker stop to-do-app || true
-        docker rm to-do-app || true
+        docker stop juromerop/to-do-app || true
+        docker rm juromerop/to-do-app || true
         echo "Deployed version: $(cat ./app/version.txt)"
         docker pull juromerop/to-do-app:$(cat ./app/version.txt)
         docker run -d -p 3000:3000 juromerop/to-do-app:$(cat ./app/version.txt)
