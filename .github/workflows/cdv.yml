@@ -14,21 +14,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # - name: SSH into VM and deploy
-    #   uses: appleboy/ssh-action@master
-    #   with:
-    #     host: ${{ secrets.VM_HOST }}
-    #     username: ${{ secrets.VM_USERNAME }}
-    #     key: ${{ secrets.SSH_PRIVATE_KEY }}
-    #     port: ${{ secrets.VM_PORT }}
-    #     script: |
-    #       docker pull juromerop/to-do-app:$(cat ./app/version.txt)
-    #       docker run -d -p 3000:3000 --name to-do-app juromerop/to-do-app:$(cat ./app/version.txt)
 
     - name: Manual Approval
       if: github.event.workflow_run.conclusion == 'success'
-      uses: "softprops/action-gh-release@v1"
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        tag_name: v$(cat ./app/version.txt)
+      run: |
+        TAG_NAME=$(cat ./app/version.txt)
+        echo "Creating new GitHub release for tag $TAG_NAME..."
+        gh release create $TAG_NAME
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
