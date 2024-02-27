@@ -20,19 +20,12 @@ jobs:
     - name: Test
       run: docker run juromerop/to-do-app npm test
 
-    # - name: Tag
-    #   run: |
-    #     echo ${{ github.sha }} > ./app/version.txt
-    #     docker tag juromerop/to-do-app juromerop/to-do-app:${{ github.sha }}
-
     - name: Tag
       run: |
-        version=$(echo git log -1 --pretty=%B | grep -oP '(?<=VERSION: ).*')
-        echo "${version}" > ./app/version.txt
-        docker tag juromerop/to-do-app juromerop/to-do-app:${version}
-
+        echo ${{ github.sha }} > ./app/version.txt
+        docker tag juromerop/to-do-app juromerop/to-do-app:${{ github.sha }}
       
     - name: Push
       run: |
         echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u juromerop --password-stdin
-        docker push juromerop/to-do-app:${version}
+        docker push juromerop/to-do-app:${{ github.sha }}
