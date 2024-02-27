@@ -39,4 +39,4 @@ jobs:
     - name: Push
       run: |
         echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u juromerop --password-stdin
-        docker push juromerop/to-do-app:${{ github.sha }}
+        docker push juromerop/to-do-app:${version}
