@@ -20,10 +20,21 @@ jobs:
     - name: Test
       run: docker run juromerop/to-do-app npm test
 
+    # - name: Tag
+    #   run: |
+    #     echo ${{ github.sha }} > ./app/version.txt
+    #     docker tag juromerop/to-do-app juromerop/to-do-app:${{ github.sha }}
+
     - name: Tag
       run: |
-        echo ${{ github.sha }} > ./app/version.txt
-        docker tag juromerop/to-do-app juromerop/to-do-app:${{ github.sha }}
+        commit_message=$(git log -1 --pretty=%B)
+        version=$(echo "${commit_message}" | grep -oP '(?<=VERSION: ).*')
+        if [ -z "${version}" ]; then
+          version="1.0.0"
+        fi
+        echo "${version}" > ./app/version.txt
+        docker tag juromerop/to-do-app juromerop/to-do-app:${version}
+
       
     - name: Push
       run: |
