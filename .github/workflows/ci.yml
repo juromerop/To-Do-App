@@ -39,4 +39,8 @@ jobs:
     - name: Push
       run: |
         echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u juromerop --password-stdin
+        if [ -z "${version}" ]; then
+          echo "No version specified. Using default version."
+          version="1.0.0"
+        fi
         docker push juromerop/to-do-app:${version}
