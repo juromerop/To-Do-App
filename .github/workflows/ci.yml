@@ -34,7 +34,6 @@ jobs:
 
     - name: Tag
       run: |
-        echo $(cat ./app/version.txt) > ./app/version.txt
         docker tag juromerop/to-do-app juromerop/to-do-app:$(cat ./app/version.txt)
       
     - name: Push
