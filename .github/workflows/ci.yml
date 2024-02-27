@@ -9,6 +9,8 @@ jobs:
   build:
 
     runs-on: self-hosted
+    env:
+      IMAGE_VERSION: "1.0.2"
 
     steps:
     - name: Code
@@ -22,10 +24,10 @@ jobs:
 
     - name: Tag
       run: |
-        echo ${{ github.sha }} > ./app/version.txt
-        docker tag juromerop/to-do-app juromerop/to-do-app:${{ github.sha }}
+        echo "${IMAGE_VERSION}" > ./app/version.txt
+        docker tag juromerop/to-do-app juromerop/to-do-app:${IMAGE_VERSION}
       
     - name: Push
       run: |
         echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u juromerop --password-stdin
-        docker push juromerop/to-do-app:${{ github.sha }}
+        docker push juromerop/to-do-app:${IMAGE_VERSION}
