@@ -18,3 +18,5 @@ jobs:
     - name : Deploy
       run: |
         echo "Deployed version: $(cat ./app/version.txt)"
+        docker pull juromerop/to-do-app:$(cat ./app/version.txt)
+        docker run -d -p 3000:3000 juromerop/to-do-app:$(cat ./app/version.txt)
