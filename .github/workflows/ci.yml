@@ -34,10 +34,10 @@ jobs:
 
     - name: Tag
       run: |
-        echo ${{ github.run_id }} > ./app/version.txt
-        docker tag juromerop/to-do-app juromerop/to-do-app:${{ github.run_id }}
+        echo $(cat ./app/version.txt) > ./app/version.txt
+        docker tag juromerop/to-do-app juromerop/to-do-app:$(cat ./app/version.txt)
       
     - name: Push
       run: |
         echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u juromerop --password-stdin
-        docker push juromerop/to-do-app:${{ github.run_id }}
+        docker push juromerop/to-do-app:$(cat ./app/version.txt)
