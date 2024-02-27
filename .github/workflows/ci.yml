@@ -24,3 +24,8 @@ jobs:
       run: |
         echo ${{ github.sha }} > ./app/version.txt
         docker tag juromerop/to-do-app juromerop/to-do-app:${{ github.sha }}
+      
+    - name: Push
+      run: |
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u juromerop --password-stdin
+        docker push juromerop/to-do-app:${{ github.sha }}
