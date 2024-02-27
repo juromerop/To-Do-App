@@ -33,6 +33,7 @@ jobs:
           version="1.0.0"
         fi
         echo "${version}" > ./app/version.txt
+        echo "Tagging version: ${version}"
         docker tag juromerop/to-do-app juromerop/to-do-app:${version}
 
       
