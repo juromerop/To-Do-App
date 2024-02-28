@@ -1,20 +1,15 @@
 name: CD
 
 on:
-  push:
-    branches: [ "develop" ]
-    types:
-      - completed
   workflow_dispatch:
     inputs:
-      input:
+      version:
         description: 'Version to deploy'
-        required: true
-        default: '1.0.1'
+        required: true 
 
 jobs:
   deploy:
-    if: github.event.workflow_run.conclusion == 'success'
+
     runs-on: self-hosted
 
     steps:
@@ -25,6 +20,6 @@ jobs:
       run: |
         docker stop $(docker ps -a -q)
         docker rm $(docker ps -a -q)
-        echo "Deployed version: ${{ github.event.inputs.input }}"
-        docker pull juromerop/to-do-app:${{ github.event.inputs.input }}
-        docker run -d -p 3000:3000 juromerop/to-do-app:${{ github.event.inputs.input }}
+        echo "Deployed version: ${{ github.event.inputs.version }}"
+        docker pull juromerop/to-do-app:${{ github.event.inputs.version }}
+        docker run -d -p 3000:3000 juromerop/to-do-app:${{ github.event.inputs.version }}
