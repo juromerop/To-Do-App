@@ -1,0 +1,25 @@
+
+name: CDP
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name : Deploy
+      run: |
+        docker stop $(docker ps -a -q)
+        docker rm $(docker ps -a -q)
+        echo "Deployed version: $(cat ./app/version.txt)"
+        docker pull juromerop/to-do-app:$(cat ./app/version.txt)
+        docker run -d -p 3000:3000 juromerop/to-do-app:$(cat ./app/version.txt)

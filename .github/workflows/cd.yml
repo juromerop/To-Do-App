@@ -8,8 +8,9 @@ on:
   workflow_dispatch:
     inputs:
       input:
-        description: 'Run CD'
+        description: 'Version to deploy'
         required: true
+        default: '1.0.1'
 
 jobs:
   deploy:
@@ -24,18 +25,6 @@ jobs:
       run: |
         docker stop $(docker ps -a -q)
         docker rm $(docker ps -a -q)
-        echo "Deployed version: $(cat ./app/version.txt)"
-        docker pull juromerop/to-do-app:$(cat ./app/version.txt)
-        docker run -d -p 3000:3000 juromerop/to-do-app:$(cat ./app/version.txt)
-  
-  delivery:
-
-    runs-on: self-hosted
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    
-    - name: Delivery
-      run: |
-        echo "Delivered version: $(cat ./app/version.txt)"
+        echo "Deployed version: ${{ github.event.inputs.input }}"
+        docker pull juromerop/to-do-app:${{ github.event.inputs.input }}
+        docker run -d -p 3000:3000 juromerop/to-do-app:${{ github.event.inputs.input }}
