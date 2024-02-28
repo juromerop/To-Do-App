@@ -9,17 +9,15 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Manual Approval
+        uses: "peter-evans/approval-action@v2"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          message: "Approve deployment to production"
+          reviewers: "juromerop"
 
-
-    - name: Manual Approval
-      if: github.event.workflow_run.conclusion == 'success'
-      run: |
-        TAG_NAME=$(cat ./app/version.txt)
-        echo "Creating new GitHub release for tag $TAG_NAME..."
-        gh release create $TAG_NAME
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy to Production
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+        run: |
+          echo "Deploying to production"
