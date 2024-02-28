@@ -5,19 +5,30 @@ on:
     workflows: ["CI"]
     types:
       - completed
+  workflow_dispatch:
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Add build and test steps here
+
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
     steps:
       - name: Manual Approval
-        uses: "peter-evans/approval-action@v2"
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          message: "Approve deployment to production"
-          reviewers: "juromerop"
+        if: github.event_name == 'workflow_dispatch'
+        run: echo "Please approve the deployment in the GitHub UI"
 
       - name: Deploy to Production
-        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.name == 'build'
         run: |
+          # Add your deployment steps here
           echo "Deploying to production"
