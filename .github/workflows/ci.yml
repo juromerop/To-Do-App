@@ -38,6 +38,7 @@ jobs:
 
     needs: test
 
+    steps:
     - name: Tag
       run: |
         docker tag juromerop/to-do-app juromerop/to-do-app:$(cat ./app/version.txt)
