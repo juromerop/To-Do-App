@@ -5,6 +5,7 @@ on:
     workflows: ["CI"]
     types:
       - completed
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -22,3 +23,15 @@ jobs:
         echo "Deployed version: $(cat ./app/version.txt)"
         docker pull juromerop/to-do-app:$(cat ./app/version.txt)
         docker run -d -p 3000:3000 juromerop/to-do-app:$(cat ./app/version.txt)
+  
+  delivery:
+
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Delivery
+      run: |
+        echo "Delivered version: $(cat ./app/version.txt)"
